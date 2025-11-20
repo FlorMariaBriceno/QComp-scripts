@@ -19,7 +19,7 @@ Posiblemente sea necesario concederle el permiso de ejecución previamente con
 
 chmod +x dockingRunner.sh
 
-Cualquier duda conmigo, por favor' 
+Cualquier duda conmigo, por favor ' 
 
 #!/bin/bash
 # Parte 1. Introducir el nombre del ligando
