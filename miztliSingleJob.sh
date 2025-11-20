@@ -33,7 +33,7 @@ export tempdir=$PWD/tempdir                         # Crear directorio temporal 
 if [ ! -d $tempdir ]; then mkdir $tempdir; fi       # Si ~/tmpu/tempdir no existe, se crea.
 
 # Procesamiento del archivo de entrada. Se copia desde ~/tmpu/ a $PWD/tempdir/
-file="insertarAquiElNombre"               # Modificar entre las comillas con el nombre del archivo  .inp, sin extensión
+file="insertarAquiElNombre"                         # Modificar entre las comillas con el nombre del archivo .inp, sin extensión
 cp -f ${file} $tempdir
 cd $tempdir
 export OMPI_MCA_pml="^ucx"                          # NO MODIFICAR!!! Establece que la interfaz de paso de mensajes (MPI) se comunique mediante la red infiniband
