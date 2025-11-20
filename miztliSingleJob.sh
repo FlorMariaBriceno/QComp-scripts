@@ -3,6 +3,8 @@
 El script original pertenece al Laboratorio Nacional de Cómputo de Alto Desempeño (LANCAD),
 pero hice algunas modificaciones para facilitar su uso.
 
+Se ejecuta como: bsub < miztliSingleJob.sh
+
 La supercomputadora Miztli usa IBM Spectrum LSF como administrador de recursos HPC (High Performance Computing)
 y cuenta con RedHat Linux '
 
