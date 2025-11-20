@@ -1,7 +1,12 @@
-: ' Bash script para enviar un job a Miztli
+: ' Bash script para enviar jobs consecutivos a Miztli
 
 El script original pertenece al Laboratorio Nacional de Cómputo de Alto Desempeño (LANCAD),
 pero hice algunas modificaciones para facilitar su uso.
+
+NO CONFUNDIR CON SingleJob. Este script cuenta con una estructura cíclica donde los archivos cuentan
+con nombres iterables mediante Bash.
+
+Se manda como: bsub < miztliMultJob.sh
 
 La supercomputadora Miztli usa IBM Spectrum LSF como administrador de recursos HPC (High Performance Computing)
 y cuenta con RedHat Linux '
@@ -34,11 +39,21 @@ if [ ! -d $tempdir ]; then mkdir $tempdir; fi       # Si ~/tmpu/tempdir no exist
 export OMPI_MCA_pml="^ucx"                          # NO MODIFICAR!!! Establece que la interfaz de paso de mensajes (MPI) se comunique mediante la red infiniband
 export OMPI_MCA_btl_openib_allow_ib="true"          # NO MODIFICAR!!! Permite a MPI usar la conexión por InifiBand
 
-# Procesamiento del archivo de entrada. Se copia desde ~/tmpu/ a $PWD/tempdir/
-file="insertarAquiElNombre"                         # Modificar entre las comillas con el nombre del archivo .inp, sin extensión
-cp -f ${file}.inp $tempdir
-cd $tempdir
-${ORCA}/orca ${file}.inp | tee ${file}.out          # Ejecutar el cálculo con el módulo de ORCA cargado anteriormente
+# Procesamiento del archivo de entrada de manera cíclica. Se copia desde ~/tmpu/ a $PWD/tempdir/
+for i in {1..10..1}     # Este ciclo for ejecutará 10 cálculos. El primer número es el punto de partida, el segundo el final y el tercero es el incremento
+do
+    cp -f ${i}-${file}.inp $tempdir                     # Copiar el archivo de entrada
+    cd $tempdir                                         # Entrar a $tempdir
+    ${ORCA}/orca ${i}-${file}.inp | tee ${i}-${file}.out    # Ejecutar cálculo
+    wait $!                                             # Esperar a que termine el cálculo
+    # Revisar el estado de terminación
+    if grep -q "ORCA TERMINATED NORMALLY" ${i}-${file}.out;                 # El string ORCA TERMINATED NORMALLY indica que no hubo problemas
+    then
+        echo -e "Cálculo finalizado sin errores evidentes\n"
+    else
+        echo -e "Cálculo sin terminar o con errores, favor de revisar\n"
+    fi
+done                   # Finalización del ciclo
 
 # Post-procesamiento
 rm $tempdir/*.tmp*                                  # Eliminar todos los archivos temporales
