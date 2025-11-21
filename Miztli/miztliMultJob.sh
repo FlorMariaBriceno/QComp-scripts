@@ -40,6 +40,7 @@ export OMPI_MCA_pml="^ucx"                          # NO MODIFICAR!!! Establece 
 export OMPI_MCA_btl_openib_allow_ib="true"          # NO MODIFICAR!!! Permite a MPI usar la conexión por InifiBand
 
 # Procesamiento del archivo de entrada de manera cíclica. Se copia desde ~/tmpu/ a $PWD/tempdir/
+file="insertarAquiElNombre"                         # Modificar entre las comillas con el nombre del archivo .inp, sin extensión
 for i in {1..10..1}     # Este ciclo for ejecutará 10 cálculos. El primer número es el punto de partida, el segundo el final y el tercero es el incremento
 do
     cp -f ${i}-${file}.inp $tempdir                     # Copiar el archivo de entrada
